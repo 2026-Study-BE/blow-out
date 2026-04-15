@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Nunito',sans-serif;
+    background:linear-gradient(135deg,#1a0533 0%,#2d0a4e 40%,#1a1060 100%);
+    min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; overflow:hidden; position:relative;
+  }
+  .stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+  .star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:0.2;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+
+  .scene{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
+  .title{font-family:'Fredoka One',cursive;font-size:2.4rem;color:#FFD700;
+    text-shadow:0 0 20px rgba(255,215,0,0.6),0 2px 4px rgba(0,0,0,0.5);
+    margin-bottom:1.5rem;letter-spacing:2px;text-align:center;}
+  .title span{color:#FF6B9D;}
+
+  .cake-container{position:relative;width:340px;display:flex;flex-direction:column;align-items:center;}
+  .candles-row{display:flex;gap:18px;margin-bottom:-4px;z-index:3;position:relative;}
+  .candle-wrap{display:flex;flex-direction:column;align-items:center;}
+
+  .flame-container{width:22px;height:36px;position:relative;display:flex;justify-content:center;}
+  .flame{position:absolute;bottom:0;width:14px;height:22px;
+    background:radial-gradient(ellipse at 50% 100%,#FFE082 0%,#FF9800 40%,#FF5722 80%,transparent 100%);
+    border-radius:50% 50% 30% 30%/60% 60% 40% 40%;
+    animation:flicker 0.6s ease-in-out infinite alternate;
+    transform-origin:bottom center;filter:drop-shadow(0 0 6px #FF9800);}
+  .flame::before{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+    width:6px;height:10px;background:radial-gradient(ellipse,#FFF9C4 0%,#FFF176 60%,transparent 100%);border-radius:50%;}
+  .flame-glow{position:absolute;bottom:-4px;width:24px;height:30px;
+    background:radial-gradient(ellipse,rgba(255,152,0,0.4) 0%,transparent 70%);
+    border-radius:50%;animation:glow-pulse 0.8s ease-in-out infinite alternate;}
+  @keyframes flicker{0%{transform:scaleX(1) rotate(-2deg);height:22px}100%{transform:scaleX(0.85) rotate(2deg);height:26px}}
+  @keyframes glow-pulse{0%{opacity:0.6;transform:scale(1)}100%{opacity:1;transform:scale(1.15)}}
+
+  .smoke{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);display:none;}
+  .smoke-particle{width:6px;height:6px;background:rgba(200,200,200,0.6);border-radius:50%;
+    position:absolute;animation:rise var(--t,1.5s) ease-out forwards;}
+  @keyframes rise{0%{opacity:0.8;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx,0px),-50px) scale(2.5)}}
+
+  .candle-body{width:16px;height:52px;border-radius:3px;position:relative;overflow:hidden;}
+  .candle-body::after{content:'';position:absolute;top:0;left:2px;width:3px;height:100%;background:rgba(255,255,255,0.3);border-radius:2px;}
+  .candle-wick{width:2px;height:6px;background:#333;border-radius:1px;margin-bottom:-1px;}
+  .candle-wrap:nth-child(1) .candle-body{background:linear-gradient(180deg,#FF6B9D,#E91E8C);}
+  .candle-wrap:nth-child(2) .candle-body{background:linear-gradient(180deg,#64B5F6,#1565C0);}
+  .candle-wrap:nth-child(3) .candle-body{background:linear-gradient(180deg,#A5D6A7,#2E7D32);}
+  .candle-wrap:nth-child(4) .candle-body{background:linear-gradient(180deg,#FFD54F,#F57F17);}
+  .candle-wrap:nth-child(5) .candle-body{background:linear-gradient(180deg,#CE93D8,#6A1B9A);}
+
+  .cake-top{width:300px;height:60px;background:linear-gradient(180deg,#F8BBD0 0%,#F48FB1 100%);
+    border-radius:8px 8px 0 0;position:relative;overflow:hidden;box-shadow:0 -3px 0 #FCE4EC;}
+  .cake-top::before{content:'';position:absolute;top:8px;left:0;right:0;height:12px;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,0.5) 0px,rgba(255,255,255,0.5) 14px,transparent 14px,transparent 28px);}
+  .frosting{position:absolute;top:0;left:0;right:0;display:flex;}
+  .frosting-drop{width:28px;height:20px;background:white;border-radius:0 0 50% 50%;opacity:0.9;}
+  .cake-mid{width:300px;height:70px;background:linear-gradient(180deg,#CE93D8 0%,#AB47BC 100%);position:relative;overflow:hidden;}
+  .cake-mid::before{content:'🎂 🎉 🎊';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.1rem;letter-spacing:4px;opacity:0.7;}
+  .cake-bot{width:320px;height:80px;background:linear-gradient(180deg,#FFCC80 0%,#FF9800 100%);
+    border-radius:0 0 16px 16px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+  .cake-bot::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.4);}
+  .dots{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:8px;}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.7);}
+  .plate{width:360px;height:20px;background:linear-gradient(180deg,#E0E0E0,#BDBDBD);
+    border-radius:50%;box-shadow:0 4px 12px rgba(0,0,0,0.3);margin-top:-8px;}
+
+  .controls{margin-top:2rem;display:flex;flex-direction:column;align-items:center;gap:1rem;}
+
+  .mic-btn{background:linear-gradient(135deg,#FF6B9D,#C2185B);color:white;border:none;
+    padding:0.9rem 2.2rem;border-radius:50px;font-family:'Nunito',sans-serif;
+    font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:0.6rem;
+    box-shadow:0 4px 20px rgba(255,107,157,0.5);transition:all 0.2s;}
+  .mic-btn:hover{transform:translateY(-2px);}
+  .mic-btn:active{transform:scale(0.96);}
+  .mic-btn.listening{background:linear-gradient(135deg,#66BB6A,#2E7D32);
+    box-shadow:0 4px 20px rgba(102,187,106,0.5);animation:pulse-btn 1s ease-in-out infinite;}
+  @keyframes pulse-btn{0%,100%{box-shadow:0 4px 20px rgba(102,187,106,0.5)}50%{box-shadow:0 4px 30px rgba(102,187,106,0.9)}}
+
+  .keyword-hint{color:rgba(255,255,255,0.55);font-size:0.82rem;text-align:center;line-height:1.6;}
+  .keyword-hint strong{color:#FFD700;font-size:1.15rem;font-weight:700;}
+
+  .transcript-box{
+    min-height:2rem;padding:0.45rem 1.1rem;
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+    border-radius:20px;font-size:0.9rem;color:rgba(255,255,255,0.7);
+    text-align:center;min-width:200px;transition:all 0.2s;
+  }
+  .transcript-box.hit{background:rgba(255,215,0,0.2);border-color:#FFD700;color:#FFD700;font-weight:700;}
+
+  .status-msg{font-size:0.9rem;color:rgba(255,255,255,0.7);text-align:center;}
+
+  .congrats{display:none;flex-direction:column;align-items:center;gap:0.5rem;
+    animation:pop-in 0.5s cubic-bezier(0.175,0.885,0.32,1.275);}
+  .congrats.show{display:flex;}
+  @keyframes pop-in{0%{transform:scale(0.5);opacity:0}100%{transform:scale(1);opacity:1}}
+  .congrats-text{font-family:'Fredoka One',cursive;font-size:2rem;color:#FFD700;text-shadow:0 0 20px rgba(255,215,0,0.8);}
+  .restart-btn{background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);
+    padding:0.5rem 1.4rem;border-radius:50px;font-family:'Nunito',sans-serif;
+    font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+  .restart-btn:hover{background:rgba(255,255,255,0.25);}
+
+  .confetti-piece{position:fixed;pointer-events:none;animation:fall var(--dur) ease-in forwards;z-index:10;}
+  @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="scene">
+  <div class="title">🎂 <span>Happy</span> Birthday! 🎂</div>
+
+  <div class="cake-container">
+    <div class="candles-row" id="candlesRow"></div>
+    <div class="cake-top"><div class="frosting" id="frosting"></div></div>
+    <div class="cake-mid"></div>
+    <div class="cake-bot"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+    <div class="plate"></div>
+  </div>
+
+  <div class="controls">
+    <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤 마이크 켜기</button>
+    <div class="keyword-hint">아래 단어를 말하면 촛불이 꺼져요!<br><strong>✨ 축하해 ✨</strong></div>
+    <div class="transcript-box" id="transcriptBox">…</div>
+    <div class="status-msg" id="statusMsg">버튼을 눌러 마이크를 켜세요!</div>
+    <div class="congrats" id="congrats">
+      <div class="congrats-text">🎉 생일 축하해요! 🎉</div>
+      <button class="restart-btn" onclick="restart()">🕯️ 다시 켜기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CANDLE_COUNT = 5;
+const KEYWORD = '축하해';
+
+let recognition = null;
+let isListening = false;
+let candleStates = Array(CANDLE_COUNT).fill(true);
+let allOut = false;
+let candleQueue = [];   // 꺼질 순서를 미리 섞어둠
+
+function buildStars(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<80;i++){
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()*3+1;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s`;
+    c.appendChild(s);
+  }
+}
+
+function buildCandles(){
+  const row=document.getElementById('candlesRow');
+  row.innerHTML='';
+  candleStates=Array(CANDLE_COUNT).fill(true);
+  // 꺼질 순서 랜덤 셔플
+  candleQueue=[...Array(CANDLE_COUNT).keys()];
+  for(let i=candleQueue.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [candleQueue[i],candleQueue[j]]=[candleQueue[j],candleQueue[i]];
+  }
+  for(let i=0;i<CANDLE_COUNT;i++){
+    const wrap=document.createElement('div');
+    wrap.className='candle-wrap'; wrap.id=`candle-${i}`;
+    wrap.innerHTML=`
+      <div class="flame-container" id="flame-${i}">
+        <div class="flame-glow"></div><div class="flame"></div>
+        <div class="smoke" id="smoke-${i}"></div>
+      </div>
+      <div class="candle-wick"></div><div class="candle-body"></div>`;
+    row.appendChild(wrap);
+  }
+}
+
+function buildFrosting(){
+  const f=document.getElementById('frosting');
+  for(let i=0;i<11;i++){
+    const d=document.createElement('div'); d.className='frosting-drop'; f.appendChild(d);
+  }
+}
+
+function toggleMic(){
+  if(isListening){ stopRecognition(); return; }
+  startRecognition();
+}
+
+function startRecognition(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){
+    document.getElementById('statusMsg').textContent='이 브라우저는 음성 인식을 지원하지 않아요. Chrome을 사용해주세요!';
+    return;
+  }
+  recognition=new SR();
+  recognition.lang='ko-KR';
+  recognition.continuous=true;        // 계속 듣기
+  recognition.interimResults=true;    // 중간 결과도 받기
+
+  recognition.onstart=()=>{
+    isListening=true;
+    document.getElementById('micBtn').textContent='🎤 듣는 중...';
+    document.getElementById('micBtn').classList.add('listening');
+    document.getElementById('statusMsg').textContent='"축하해"라고 말해보세요! 🎤';
+    document.getElementById('transcriptBox').textContent='…';
+  };
+
+  recognition.onresult=(e)=>{
+    let interim='';
+    let final='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      if(e.results[i].isFinal) final+=t;
+      else interim+=t;
+    }
+
+    const display=(final||interim).trim();
+    if(display) document.getElementById('transcriptBox').textContent=display;
+
+    // 최종 결과에서 키워드 감지
+    if(final && final.includes(KEYWORD) && !allOut){
+      onKeywordDetected();
+    }
+    // 중간 결과에서도 감지 (빠른 반응)
+    if(interim && interim.includes(KEYWORD) && !allOut){
+      onKeywordDetected();
+    }
+  };
+
+  recognition.onerror=(e)=>{
+    if(e.error==='not-allowed'){
+      document.getElementById('statusMsg').textContent='마이크 권한을 허용해주세요 🙏';
+    }
+  };
+
+  // continuous 모드에서 자동 종료되면 재시작
+  recognition.onend=()=>{
+    if(isListening && !allOut) recognition.start();
+  };
+
+  recognition.start();
+}
+
+function stopRecognition(){
+  isListening=false;
+  if(recognition){ recognition.onend=null; recognition.stop(); }
+  document.getElementById('micBtn').textContent='🎤 마이크 켜기';
+  document.getElementById('micBtn').classList.remove('listening');
+  document.getElementById('statusMsg').textContent='버튼을 눌러 마이크를 켜세요!';
+  document.getElementById('transcriptBox').textContent='…';
+  document.getElementById('transcriptBox').classList.remove('hit');
+}
+
+let keywordCooldown=false;
+function onKeywordDetected(){
+  if(keywordCooldown||allOut) return;
+  keywordCooldown=true;
+
+  // 트랜스크립트 박스 강조
+  const box=document.getElementById('transcriptBox');
+  box.textContent='✨ 축하해 ✨';
+  box.classList.add('hit');
+  setTimeout(()=>{ box.classList.remove('hit'); box.textContent='…'; },1200);
+
+  // 큐에서 다음 초 꺼내서 끄기
+  if(candleQueue.length>0){
+    const idx=candleQueue.shift();
+    blowOutCandle(idx);
+    const rem=candleStates.filter(Boolean).length;
+    if(rem>0) document.getElementById('statusMsg').textContent=`남은 초: ${rem}개 — 다시 말해봐요! 🕯️`;
+    if(rem===0){ allOut=true; setTimeout(celebrate,700); }
+  }
+
+  setTimeout(()=>{ keywordCooldown=false; },900); // 0.9초 쿨다운
+}
+
+function blowOutCandle(idx){
+  if(!candleStates[idx]) return;
+  candleStates[idx]=false;
+  const fc=document.getElementById(`flame-${idx}`);
+  fc.querySelector('.flame').style.display='none';
+  fc.querySelector('.flame-glow').style.display='none';
+  const smokeEl=document.getElementById(`smoke-${idx}`);
+  smokeEl.style.display='block';
+  for(let i=0;i<5;i++){
+    const p=document.createElement('div'); p.className='smoke-particle';
+    const dx=(Math.random()-0.5)*20;
+    p.style.cssText=`--t:${1+Math.random()}s;--dx:${dx}px;animation-delay:${i*0.12}s;left:${3+Math.random()*4}px`;
+    smokeEl.appendChild(p);
+    setTimeout(()=>p.remove(),2500);
+  }
+}
+
+function celebrate(){
+  stopRecognition();
+  document.getElementById('statusMsg').style.display='none';
+  document.getElementById('micBtn').style.display='none';
+  document.getElementById('transcriptBox').style.display='none';
+  document.getElementById('congrats').classList.add('show');
+  spawnConfetti();
+}
+
+function spawnConfetti(){
+  const colors=['#FFD700','#FF6B9D','#64B5F6','#A5D6A7','#CE93D8','#FFCC80','#FF5722','#26C6DA'];
+  for(let i=0;i<80;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div'); el.className='confetti-piece';
+      el.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>0.5?'50%':'2px'};width:${6+Math.random()*10}px;height:${6+Math.random()*10}px;--dur:${2+Math.random()*3}s;animation-delay:${Math.random()*0.5}s;`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),5000);
+    },i*40);
+  }
+}
+
+function restart(){
+  allOut=false; keywordCooldown=false;
+  document.getElementById('congrats').classList.remove('show');
+  document.getElementById('statusMsg').style.display='';
+  document.getElementById('statusMsg').textContent='버튼을 눌러 마이크를 켜세요!';
+  document.getElementById('micBtn').style.display='';
+  document.getElementById('transcriptBox').style.display='';
+  buildCandles();
+}
+
+buildStars(); buildCandles(); buildFrosting();
+</script>
+</body>
+</html>
