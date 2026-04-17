@@ -580,7 +580,7 @@
               if (!isListening) return;
               analyser.getByteFrequencyData(data);
               const avg = data.reduce((a, b) => a + b, 0) / data.length;
-              if (avg > 45 && !allOut) onKeywordDetected();
+              if (avg > 25 && !allOut) onKeywordDetected();
               animFrameId = requestAnimationFrame(checkVolume);
             }
             checkVolume();
