@@ -78,7 +78,7 @@
       }
       .candles-row {
         display: flex;
-        gap: 18px;
+        gap: 40px;
         margin-bottom: -4px;
         z-index: 3;
         position: relative;
@@ -222,12 +222,12 @@
 
       .cake-top {
         width: 300px;
-        height: 60px;
-        background: linear-gradient(180deg, #f8bbd0 0%, #f48fb1 100%);
+        height: 40px;
+        background: linear-gradient(180deg, #ff8a80 0%, #e53935 100%);
         border-radius: 8px 8px 0 0;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 -3px 0 #fce4ec;
+        box-shadow: 0 -3px 0 #ffcdd2;
       }
       .cake-top::before {
         content: "";
@@ -253,32 +253,32 @@
       }
       .frosting-drop {
         width: 28px;
-        height: 20px;
+        height: 30px;
         background: white;
         border-radius: 0 0 50% 50%;
         opacity: 0.9;
       }
       .cake-mid {
         width: 300px;
-        height: 70px;
-        background: linear-gradient(180deg, #ce93d8 0%, #ab47bc 100%);
+        height: 120px;
+        background: linear-gradient(180deg, #6d4c41 0%, #4e342e 100%);
         position: relative;
         overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
-      .cake-mid::before {
-        content: "🎂 🎉 🎊";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 1.1rem;
-        letter-spacing: 4px;
-        opacity: 0.7;
+      .cake-mid-img {
+        height: 130px;
+        width: auto;
+        object-fit: contain;
+        position: relative;
+        z-index: 1;
       }
       .cake-bot {
         width: 320px;
-        height: 80px;
-        background: linear-gradient(180deg, #ffcc80 0%, #ff9800 100%);
+        height: 40px;
+        background: linear-gradient(180deg, #ef5350 0%, #b71c1c 100%);
         border-radius: 0 0 16px 16px;
         position: relative;
         overflow: hidden;
@@ -295,15 +295,15 @@
       }
       .dots {
         position: absolute;
-        top: 50%;
+        top: 100%;
         left: 50%;
         transform: translate(-50%, -50%);
         display: flex;
         gap: 8px;
       }
       .dot {
-        width: 10px;
-        height: 10px;
+        width: 65px;
+        height: 65px;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.7);
       }
@@ -467,7 +467,9 @@
       <div class="cake-container">
         <div class="candles-row" id="candlesRow"></div>
         <div class="cake-top"><div class="frosting" id="frosting"></div></div>
-        <div class="cake-mid"></div>
+        <div class="cake-mid">
+          <img class="cake-mid-img" src="image-loeun.png" alt="케이크 이미지" />
+        </div>
         <div class="cake-bot">
           <div class="dots">
             <div class="dot"></div>
