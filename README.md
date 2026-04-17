@@ -1,4 +1,8 @@
 # blow-out
 
-python -m http.server 8000
-http://localhost:8000/blow-out.html
+```
+echo "http://localhost:8000/index.html" && python -m http.server 8000
+
+```
+
+https://2026-study-be.github.io/blow-out/
